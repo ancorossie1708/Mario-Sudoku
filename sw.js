@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mario-sudoku-v3'; // עדכון ל-v3 כדי לאלץ ריענון אצל המשתמשים
+const CACHE_NAME = 'mario-sudoku-v4'; // שדרוג לגרסה v4
 const ASSETS = [
   './',
   './index.html',
@@ -8,40 +8,45 @@ const ASSETS = [
   './pics/peach.png',
   './pics/toad.png',
   './pics/bowser.png',
-  './pics/wario.png'
+  './pics/wario.png',
+  './animation/bowser_laugh.webp' // הוספת קובץ האנימציה לרשימה
 ];
 
-// התקנה ושמירת קבצים בזיכרון המטמון (Cache)
+// התקנה: מוריד את כל הקבצים החדשים לזיכרון
 self.addEventListener('install', (event) => {
+  self.skipWaiting(); // מכריח את ה-SW החדש להשתלט מיד
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
     })
   );
-  // גורם ל-Service Worker החדש להיכנס לפעולה מיד בלי לחכות לסגירת האפליקציה
-  self.skipWaiting();
 });
 
-// ניקוי זיכרונות מטמון ישנים (חשוב מאוד לעדכון גרסאות!)
+// הפעלה: מוחק באגרסיביות כל זיכרון ישן (v1, v2, v3)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then((keys) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          // אם מצאנו זיכרון ישן ששמו שונה מ-v3 הנוכחי, נמחק אותו
-          if (cacheName !== CACHE_NAME) {
-            console.log('מוחק זיכרון מטמון ישן:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
+        keys.filter((key) => key !== CACHE_NAME)
+            .map((key) => caches.delete(key))
       );
     })
   );
-  return self.clients.claim();
+  // משתלט על כל הטאבים הפתוחים מיד
+  self.clients.claim();
 });
 
-// הגשת קבצים מהזיכרון המקומי לטובת עבודה באופליין
+// ניהול בקשות: אסטרטגיית "רשת קודם" לקובץ הראשי כדי להבטיח עדכון
 self.addEventListener('fetch', (event) => {
+  // אם מדובר בניווט לדף הראשי, נסה להביא מהרשת כדי לראות אם יש שינוי
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
+  // לשאר הקבצים (תמונות וכו'), השתמש בזיכרון המטמון למהירות
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request);
