@@ -1,0 +1,79 @@
+<!-- UPDATED HTML (with PWA support added) -->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>סודוקו מריו</title>
+
+    <!-- ✅ PWA MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Optional: theme color for Android status bar -->
+    <meta name="theme-color" content="#5c94fc">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body, html {
+            background-color: #5c94fc; 
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- YOUR EXISTING GAME SCRIPT REMAINS UNCHANGED -->
+</body>
+</html>
+
+
+<!-- ============================= -->
+<!-- CREATE THIS FILE NEXT TO HTML -->
+<!-- ============================= -->
+
+/* manifest.json */
+{
+  "name": "Mario_Sudoku",
+ "short_name": "Marios",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#5c94fc",
+  "theme_color": "#5c94fc",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
+
+
+<!-- ============================= -->
+<!-- WHAT YOU STILL NEED TO DO -->
+<!-- ============================= -->
+
+1. Save this HTML (replace your current file)
+2. Create a file: manifest.json (copy above JSON)
+3. Save your image as: icon.png (192x192)
+4. Upload all 3 files to GitHub Pages
+
+DONE ✅
